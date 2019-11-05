@@ -24,22 +24,26 @@ res.status(200).send(tarefas.find(tarefas => tarefas.id == id))
         res.status(200).send(tarefas.filter(tarefas => tarefas.autor == autores));
     }
 
-    exports.getConclusao = (req, res) => {
-        const conclusao = req.params.dataConclusao
-        res.status(200).send(tarefas.sort(tarefas => tarefas.conclusao == conclusao));
-    }
-    /*
-    exports.getAge = (req, res) => {
-        const id = req.params.id
-        const aluna = alunas.find(item => item.id == id)
-        const dataNasc = aluna.dateOfBirth
-        const arrData = dataNasc.split("/")
-        const dia = arrData[0]
-        const mes = arrData[1]
-        const ano = arrData[2]
-        const idade = calcularIdade(ano, mes, dia)
-        res.status(200).send({ idade })
-      }
-      */
+    function stringParaData(data){
+        const dataSplit = data.split("/");
+        const dataComSeparador = dataSplit[1] + '-' + dataSplit[0] + '-' + dataSplit[2];
+        const dataFormatada = new Date(dataComSeparador);
+        return dataFormatada;
+        }
 
-     n3-backend-projeto-pratico
+        exports.getdataOrdenada = (req, res) => {
+            const dataOrdenadas = tarefas.sort(function (a,b) {
+                if (stringParaData(a.dataInclusao) > stringParaData(b.dataInclusao)) {
+                    return 1
+                }
+                if (stringParaData(a.dataInclusao) < stringParaData(b.dataInclusao)) {
+                    return -1;
+            }
+            return 0;
+        })
+        res.send(dataOrdenadas);
+
+        }
+        // exports.getPeriodoTarefa = (req, res) => {
+        //     function calcularPeriodo(dataInicial, )
+        // }
